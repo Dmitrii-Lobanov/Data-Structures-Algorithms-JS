@@ -41,20 +41,26 @@ console.log(containsCommonItem(array1, array2)); // false
 console.log(containsCommonItem(array3, array4)); // true
 
 // Better solution O(a+b)
+const arrayToObject = (array) => {
+    let map = {};
+
+    for (let i = 0; i < array.length; i++) {
+        if (!map[array[i]]) {
+            const item = array[i];
+            map[item] = true;
+        }
+    }
+
+    return map;
+}
+
 const containsCommonItem2 = (arr1, arr2) => {
     // Early return if either array is null or undefined or empty
     if (!arr1 || !arr2) {
         return false;
     }
 
-    let map = {};
-
-    for (let i = 0; i < arr1.length; i++) {
-        if (!map[arr1[i]]) {
-            const item = arr1[i];
-            map[item] = true;
-        }
-    }
+    const map = arrayToObject(arr1);
 
     for (let j = 0; j < arr2.length; j++) {
         if (map[arr2[j]]) {
