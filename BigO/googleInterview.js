@@ -1,87 +1,60 @@
-// https://www.youtube.com/watch?v=XKu_SEDAykw
+// Naive solution O(a*b) - nested loops (O(n^2))
+function hasPairWithSum(arr, sum) {
+  const length = arr.length;
 
-/** 
-     * Given two arrays, create a function that let's a user know 
-     * (true/false) whether these two arrays contain any common items
-     * For Example:
-     * const array1 = ['a', 'b', 'c', 'x'];
-     * const array2 = ['z', 'y', 'i'];
-     * should return false
-     * 
-     * const array1 = ['a', 'b', 'c', 'x'];
-     * const array2 = ['z', 'y', 'x'];
-     * should return true
- */
-
-
-
-const array1 = ['a', 'b', 'c', 'x'];
-const array2 = ['z', 'y', 'i'];
-const array3 = ['a', 'b', 'c', 'x'];
-const array4 = ['z', 'y', 'x'];
-
-// Naive and ineffective solution O(a*b)
-const containsCommonItem = (arr1, arr2) => {
-    // Early return if either array is null or undefined or empty
-    if (!arr1 || !arr2) {
-        return false;
+  for (let i = 0; i < length - 1; i++) {
+    for (let j = i + 1; j < length; j++) {
+      if (arr[i] + arr[j] === sum) {
+        return true;
+      }
     }
+}
 
-    for (let i = 0; i < arr1.length; i++) {
-        for (let j = 0; j < arr2.length; j++) {
-            if (arr1[i] === arr2[j]) {
-                return true;
-            }
-        }
-    }
     return false;
 }
 
-console.log(containsCommonItem(array1, array2)); // false
-console.log(containsCommonItem(array3, array4)); // true
+console.log(hasPairWithSum([1, 2, 3, 4], 5)); // true
+console.log(hasPairWithSum([1, 2, 3, 4], 8)); // false
 
-// Better solution O(a+b)
-const arrayToObject = (array) => {
-    let map = {};
+// Better solution O(n) - using a hash set
+function hasPairWithSum2(arr, sum) {
+  const mySet = new Set();
+  const len = arr.length;
 
-    for (let i = 0; i < array.length; i++) {
-        if (!map[array[i]]) {
-            const item = array[i];
-            map[item] = true;
-        }
+  for (let i = 0; i < len; i++) {
+    if (mySet.has(arr[i])) {
+
+        return true;
     }
+    mySet.add(sum - arr[i]);
+  } 
 
-    return map;
+  return false;
 }
 
-const containsCommonItem2 = (arr1, arr2) => {
-    // Early return if either array is null or undefined or empty
-    if (!arr1 || !arr2) {
-        return false;
-    }
+console.log(hasPairWithSum2([1, 2, 3, 4], 5)); // true
+console.log(hasPairWithSum2([1, 2, 3, 4], 8)); // false
 
-    const map = arrayToObject(arr1);
+// Best solution O(n log n) - sorting and two pointers
+function hasPairWithSum3(arr, sum) {
+  arr.sort((a, b) => a - b); // Sort the array in ascending order
+  let left = 0; // Start pointer
+  let right = arr.length - 1; // End pointer
 
-    for (let j = 0; j < arr2.length; j++) {
-        if (map[arr2[j]]) {
-            return true;
-        }
+  while (left < right) {
+    const currentSum = arr[left] + arr[right];
+
+    if (currentSum === sum) {
+      return true; // Found a pair that sums to the target
+    } else if (currentSum < sum) {
+      left++; // Move the left pointer to the right to increase the sum
+    } else {
+      right--; // Move the right pointer to the left to decrease the sum
     }
-    return false;
+  }
+
+  return false; // No pair found that sums to the target
 }
 
-console.log(containsCommonItem2(array1, array2)); // false
-console.log(containsCommonItem2(array3, array4)); // true
-
-// Best solution O(a+b) using built-in methods
-const containsCommonItem3 = (arr1, arr2) => {
-    // Early return if either array is null or undefined or empty
-    if (!arr1 || !arr2) {
-        return false;
-    }
-
-    return arr1.some(item => arr2.includes(item));
-}
-
-console.log(containsCommonItem3(array1, array2)); // false
-console.log(containsCommonItem3(array3, array4)); // true
+console.log(hasPairWithSum3([1, 2, 3, 4], 5)); // true
+console.log(hasPairWithSum3([1, 2, 3, 4], 8)); // false
