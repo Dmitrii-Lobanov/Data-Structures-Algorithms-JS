@@ -66,3 +66,16 @@ const containsCommonItem2 = (arr1, arr2) => {
 
 console.log(containsCommonItem2(array1, array2)); // false
 console.log(containsCommonItem2(array3, array4)); // true
+
+// Best solution O(a+b) using built-in methods
+const containsCommonItem3 = (arr1, arr2) => {
+    // Early return if either array is null or undefined or empty
+    if (!arr1 || !arr2) {
+        return false;
+    }
+
+    return arr1.some(item => arr2.includes(item));
+}
+
+console.log(containsCommonItem3(array1, array2)); // false
+console.log(containsCommonItem3(array3, array4)); // true
