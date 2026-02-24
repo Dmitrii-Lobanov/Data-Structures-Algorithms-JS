@@ -17,4 +17,10 @@ function reverseString(str: string): string {
   return newString;
 }
 
+// Using built-in methods
+const reverseString2 = (str: string): string => {
+  return str.split("").reverse().join("");
+}
+
 console.log(reverseString("Create a function that reverses a string"));
+console.log(reverseString2("Create a function that reverses a string"));
